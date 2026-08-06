@@ -421,6 +421,9 @@
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
         <spring-security-biz.version>1.0.9-SNAPSHOT</spring-security-biz.version>
+                <slf4j.version>2.0.18</slf4j.version>
+                <spring-ldap-core-tiger.version>2.3.2.RELEASE</spring-ldap-core-tiger.version>
+                <spring-ldap-ldif-batch.version>2.3.2.RELEASE</spring-ldap-ldif-batch.version>
     </properties>
     
     <dependencyManagement>
@@ -433,7 +436,22 @@
                 <artifactId>security-biz-spring-boot-starter</artifactId>
                 <version>${spring-security-biz.version}</version>
             </dependency>
-        </dependencies>
+                <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-core-tiger</artifactId>
+            <version>${spring-ldap-core-tiger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-ldif-batch</artifactId>
+            <version>${spring-ldap-ldif-batch.version}</version>
+        </dependency>
+</dependencies>
     </dependencyManagement>
     
     <dependencies>
@@ -450,7 +468,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.13</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
         <dependency>
@@ -519,13 +537,13 @@
         <dependency>
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-core-tiger</artifactId>
-            <version>2.3.2.RELEASE</version>
+            <version>${spring-ldap-core-tiger.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.ldap/spring-ldap-ldif-batch -->
         <dependency>
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-ldif-batch</artifactId>
-            <version>2.3.2.RELEASE</version>
+            <version>${spring-ldap-ldif-batch.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.ldap/spring-ldap-ldif-core -->
         <dependency>
