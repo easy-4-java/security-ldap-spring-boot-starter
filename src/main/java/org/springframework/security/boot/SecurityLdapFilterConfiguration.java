@@ -8,11 +8,11 @@ import org.springframework.biz.web.servlet.i18n.LocaleContextFilter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.security.autoconfigure.web.servlet.ServletWebSecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.boot.biz.authentication.AuthenticationListener;
@@ -38,7 +38,7 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@AutoConfigureBefore({ SecurityFilterAutoConfiguration.class })
+@AutoConfigureBefore({ ServletWebSecurityAutoConfiguration.class })
 @ConditionalOnClass({ AbstractSecurityWebApplicationInitializer.class, SessionCreationPolicy.class })
 @ConditionalOnProperty(prefix = SecurityLdapProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ SecurityLdapProperties.class, SecurityBizProperties.class })
@@ -47,7 +47,7 @@ public class SecurityLdapFilterConfiguration {
 	@Configuration
 	@ConditionalOnProperty(prefix = SecurityLdapProperties.PREFIX, value = "enabled", havingValue = "true")
 	@EnableConfigurationProperties({ SecurityLdapProperties.class, SecurityBizProperties.class })
-	@Order(SecurityProperties.DEFAULT_FILTER_ORDER + 5)
+	@Order(Ordered.HIGHEST_PRECEDENCE + 5)
 	static class LdapWebSecurityConfigurerAdapter extends WebSecurityBizConfigurerAdapter {
 
 	    private final SecurityLdapProperties ldapProperties;
@@ -104,7 +104,7 @@ public class SecurityLdapFilterConfiguration {
 			/**
 			 * 批量设置参数
 			 */
-			PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+			PropertyMapper map = PropertyMapper.get();
 			
 			map.from(getSessionMgtProperties().isAllowSessionCreation()).to(authenticationFilter::setAllowSessionCreation);
 			
@@ -122,13 +122,10 @@ public class SecurityLdapFilterConfiguration {
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
 			
-			http.antMatcher(authcProperties.getPathPattern())
-				.exceptionHandling()
-	        	.authenticationEntryPoint(authenticationEntryPoint)
-	        	.and()
-	        	.httpBasic()
-	        	.disable()
-	        	.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
+			http.securityMatcher(authcProperties.getPathPattern())
+				.exceptionHandling(config -> config.authenticationEntryPoint(authenticationEntryPoint))
+				.httpBasic(config -> config.disable())
+				.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(authenticationProcessingFilter(), PostRequestAuthenticationProcessingFilter.class);
 			
 			super.configure(http, authcProperties.getCors());
