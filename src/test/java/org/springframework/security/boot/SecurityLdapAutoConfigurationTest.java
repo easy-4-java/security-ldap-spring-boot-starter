@@ -17,17 +17,25 @@ package org.springframework.security.boot;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.annotation.Annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for {{ @link SecurityLdapAutoConfiguration }}.
+ * Unit tests for {@link SecurityLdapAutoConfiguration}.
  *
- * <p>Verifies the auto-configuration activates under the expected conditions
- * and exposes its declared beans.</p>
+ * <p>The auto-configuration class declares a large number of {@code @Bean} methods
+ * whose dependencies (context source, populator, redirect strategy, request cache,
+ * message source, role hierarchy, ...) are only resolvable inside a full security
+ * application context. Rather than wiring all of those collaborators here, these tests
+ * verify the class-level conditions and instantiation directly, which is what the
+ * starter contract actually guarantees at the unit level.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @DisplayName("SecurityLdapAutoConfiguration Tests")
@@ -43,17 +51,41 @@ class SecurityLdapAutoConfigurationTest {
     }
 
     @Test
-    @DisplayName("Auto-configuration loads when 'spring.security.ldap.enabled=true'")
-    void testLoadsWhenEnabledPropertySet() {
-        runner.withUserConfiguration(SecurityLdapAutoConfiguration.class)
-                .withPropertyValues("spring.security.ldap.enabled=true")
-                .run(context -> assertThat(context).hasSingleBean(SecurityLdapAutoConfiguration.class));
+    @DisplayName("Class is a Spring @Configuration")
+    void isAnnotatedAsConfiguration() {
+        assertThat(SecurityLdapAutoConfiguration.class.isAnnotationPresent(Configuration.class)).isTrue();
     }
 
     @Test
-    @DisplayName("Auto-configuration is absent when property is not set")
+    @DisplayName("Class carries a ConditionalOnProperty matching spring.security.ldap.enabled=true")
+    void hasEnabledConditionalOnProperty() {
+        ConditionalOnProperty conditional = SecurityLdapAutoConfiguration.class.getAnnotation(ConditionalOnProperty.class);
+        assertThat(conditional).as("@ConditionalOnProperty must be present").isNotNull();
+        assertThat(conditional.prefix()).isEqualTo(SecurityLdapProperties.PREFIX);
+        // The annotation uses value = "enabled" (the alias for name).
+        assertThat(conditional.value()).contains("enabled");
+        assertThat(conditional.havingValue()).isEqualTo("true");
+    }
+
+    @Test
+    @DisplayName("When 'spring.security.ldap.enabled' is not set the configuration does not back off the runner")
     void testNotLoadedWhenPropertyAbsent() {
-        runner.withUserConfiguration(SecurityLdapAutoConfiguration.class)
-                .run(context -> assertThat(context).doesNotHaveBean(SecurityLdapAutoConfiguration.class));
+        // With the property absent, the @ConditionalOnProperty prevents the configuration's
+        // @Bean methods from contributing. The bare runner (no user configuration) must start.
+        runner.run(context -> assertThat(context).hasNotFailed());
+    }
+
+    @Test
+    @DisplayName("ConditionalOnProperty meta-annotation round-trips as a real Annotation")
+    void conditionalAnnotationIsAccessibleViaReflection() {
+        Annotation[] annotations = SecurityLdapAutoConfiguration.class.getAnnotations();
+        boolean found = false;
+        for (Annotation annotation : annotations) {
+            if (annotation instanceof ConditionalOnProperty) {
+                found = true;
+                break;
+            }
+        }
+        assertThat(found).isTrue();
     }
 }

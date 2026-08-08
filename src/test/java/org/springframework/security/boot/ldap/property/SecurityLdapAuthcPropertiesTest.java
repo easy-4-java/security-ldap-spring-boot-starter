@@ -17,184 +17,153 @@ package org.springframework.security.boot.ldap.property;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.boot.ldap.authentication.AuthoritiesMapperPolicy;
+import org.springframework.security.boot.ldap.authentication.DirContextPolicy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for {{ @link SecurityLdapAuthcProperties }}.
+ * Unit tests for {@link SecurityLdapAuthcProperties}.
  *
- * <p>Verifies default values, getters/setters and POJO contract.</p>
- *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @DisplayName("SecurityLdapAuthcProperties Tests")
 class SecurityLdapAuthcPropertiesTest {
+
+    private SecurityLdapAuthcProperties newProps() {
+        return new SecurityLdapAuthcProperties();
+    }
+
     @Test
     @DisplayName("Default constructor creates non-null instance")
     void testDefaultInstance() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        assertThat(props).isNotNull();
+        assertThat(newProps()).isNotNull();
     }
 
     @Test
-    @DisplayName("Field 'loginUrlPatterns' can be set and read")
+    @DisplayName("loginUrlPatterns defaults and is round-trippable")
     void testLoginUrlPatternsField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("loginUrlPatterns");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getLoginUrlPatterns()).isEqualTo("/login/ldap");
+        props.setLoginUrlPatterns("/signin/ldap/**");
+        assertThat(props.getLoginUrlPatterns()).isEqualTo("/signin/ldap/**");
     }
 
     @Test
-    @DisplayName("Field 'successUrl' can be set and read")
+    @DisplayName("successUrl defaults and is round-trippable")
     void testSuccessUrlField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("successUrl");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getSuccessUrl()).isEqualTo("/index");
+        props.setSuccessUrl("/home");
+        assertThat(props.getSuccessUrl()).isEqualTo("/home");
     }
 
     @Test
-    @DisplayName("Field 'failureUrl' can be set and read")
+    @DisplayName("failureUrl defaults and is round-trippable")
     void testFailureUrlField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("failureUrl");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getFailureUrl()).isEqualTo("/error");
+        props.setFailureUrl("/login?error");
+        assertThat(props.getFailureUrl()).isEqualTo("/login?error");
     }
 
     @Test
-    @DisplayName("Field 'usernameParameter' can be set and read")
+    @DisplayName("usernameParameter defaults and is round-trippable")
     void testUsernameParameterField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("usernameParameter");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getUsernameParameter()).isEqualTo("username");
+        props.setUsernameParameter("user");
+        assertThat(props.getUsernameParameter()).isEqualTo("user");
     }
 
     @Test
-    @DisplayName("Field 'passwordParameter' can be set and read")
+    @DisplayName("passwordParameter defaults and is round-trippable")
     void testPasswordParameterField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("passwordParameter");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getPasswordParameter()).isEqualTo("password");
+        props.setPasswordParameter("pwd");
+        assertThat(props.getPasswordParameter()).isEqualTo("pwd");
     }
 
     @Test
-    @DisplayName("Field 'targetUrlParameter' can be set and read")
+    @DisplayName("targetUrlParameter defaults and is round-trippable")
     void testTargetUrlParameterField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("targetUrlParameter");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getTargetUrlParameter()).isEqualTo("target");
+        props.setTargetUrlParameter("redirectTo");
+        assertThat(props.getTargetUrlParameter()).isEqualTo("redirectTo");
     }
 
     @Test
-    @DisplayName("Field 'useAuthenticationRequestCredentials' can be set and read")
+    @DisplayName("useAuthenticationRequestCredentials defaults and is round-trippable")
     void testUseAuthenticationRequestCredentialsField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("useAuthenticationRequestCredentials");
-            f.setAccessible(true);
-            f.set(props, true);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.isUseAuthenticationRequestCredentials()).isTrue();
+        props.setUseAuthenticationRequestCredentials(false);
+        assertThat(props.isUseAuthenticationRequestCredentials()).isFalse();
     }
 
     @Test
-    @DisplayName("Field 'ldapUrls' can be set and read")
+    @DisplayName("ldapUrls is nullable and round-trippable")
     void testLdapUrlsField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("ldapUrls");
-            f.setAccessible(true);
-            f.set(props, null);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getLdapUrls()).isNull();
+        String[] urls = {"ldap://host1:389", "ldap://host2:389"};
+        props.setLdapUrls(urls);
+        assertThat(props.getLdapUrls()).containsExactly("ldap://host1:389", "ldap://host2:389");
     }
 
     @Test
-    @DisplayName("Field 'urls' can be set and read")
+    @DisplayName("urls is nullable and round-trippable")
     void testUrlsField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("urls");
-            f.setAccessible(true);
-            f.set(props, null);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getUrls()).isNull();
+        props.setUrls(new String[]{"ldap://primary:389"});
+        assertThat(props.getUrls()).containsExactly("ldap://primary:389");
     }
 
     @Test
-    @DisplayName("Field 'pooled' can be set and read")
+    @DisplayName("pooled defaults and is round-trippable")
     void testPooledField() {
-        SecurityLdapAuthcProperties props = new SecurityLdapAuthcProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapAuthcProperties.class.getDeclaredField("pooled");
-            f.setAccessible(true);
-            f.set(props, true);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.isPooled()).isFalse();
+        props.setPooled(true);
+        assertThat(props.isPooled()).isTrue();
+    }
+
+    @Test
+    @DisplayName("dirContextPolicy defaults to SIMPLE and is round-trippable")
+    void testDirContextPolicyField() {
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getDirContextPolicy()).isEqualTo(DirContextPolicy.SIMPLE);
+        props.setDirContextPolicy(DirContextPolicy.DEFAULT_TLS);
+        assertThat(props.getDirContextPolicy()).isEqualTo(DirContextPolicy.DEFAULT_TLS);
+    }
+
+    @Test
+    @DisplayName("authoritiesMapperPolicy defaults to NONE and is round-trippable")
+    void testAuthoritiesMapperPolicyField() {
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getAuthoritiesMapperPolicy()).isEqualTo(AuthoritiesMapperPolicy.NONE);
+        props.setAuthoritiesMapperPolicy(AuthoritiesMapperPolicy.ROLE_HIERARCHY);
+        assertThat(props.getAuthoritiesMapperPolicy()).isEqualTo(AuthoritiesMapperPolicy.ROLE_HIERARCHY);
+    }
+
+    @Test
+    @DisplayName("providerUrl is round-trippable")
+    void testProviderUrlField() {
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getProviderUrl()).isNull();
+        props.setProviderUrl("ldap://192.168.0.1:389/dc=example,dc=com");
+        assertThat(props.getProviderUrl()).isEqualTo("ldap://192.168.0.1:389/dc=example,dc=com");
+    }
+
+    @Test
+    @DisplayName("captcha nested property is non-null by default")
+    void testCaptchaNestedProperty() {
+        SecurityLdapAuthcProperties props = newProps();
+        assertThat(props.getCaptcha()).isNotNull();
     }
 
     @Test

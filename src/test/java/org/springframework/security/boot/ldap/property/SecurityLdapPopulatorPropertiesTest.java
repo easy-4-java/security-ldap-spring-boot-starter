@@ -19,149 +19,79 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 /**
- * Unit tests for {{ @link SecurityLdapPopulatorProperties }}.
+ * Unit tests for {@link SecurityLdapPopulatorProperties}.
  *
- * <p>Verifies default values, getters/setters and POJO contract.</p>
- *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @DisplayName("SecurityLdapPopulatorProperties Tests")
 class SecurityLdapPopulatorPropertiesTest {
+
     @Test
-    @DisplayName("Default constructor creates non-null instance")
-    void testDefaultInstance() {
+    @DisplayName("Defaults match documented values")
+    void defaults() {
         SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        assertThat(props).isNotNull();
+        assertThat(props.getDefaultRole()).isNull();
+        assertThat(props.getGroupRoleAttribute()).isEqualTo("cn");
+        assertThat(props.getGroupSearchBase()).isNull();
+        assertThat(props.isSearchSubtree()).isFalse();
+        assertThat(props.getGroupSearchFilter()).isEqualTo("(member={0})");
+        assertThat(props.getRolePrefix()).isEqualTo("ROLE_");
+        assertThat(props.isConvertToUpperCase()).isTrue();
+        assertThat(props.isIgnorePartialResultException()).isFalse();
     }
 
     @Test
-    @DisplayName("Field 'defaultRole' can be set and read")
-    void testDefaultRoleField() {
+    @DisplayName("Setters round-trip non-null values")
+    void setters_roundTrip() {
         SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("defaultRole");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        props.setDefaultRole("USER");
+        props.setGroupRoleAttribute("dn");
+        props.setGroupSearchBase("ou=groups");
+        props.setSearchSubtree(true);
+        props.setGroupSearchFilter("(uniqueMember={0})");
+        props.setRolePrefix("GROUP_");
+        props.setConvertToUpperCase(false);
+        props.setIgnorePartialResultException(true);
+
+        assertThat(props.getDefaultRole()).isEqualTo("USER");
+        assertThat(props.getGroupRoleAttribute()).isEqualTo("dn");
+        assertThat(props.getGroupSearchBase()).isEqualTo("ou=groups");
+        assertThat(props.isSearchSubtree()).isTrue();
+        assertThat(props.getGroupSearchFilter()).isEqualTo("(uniqueMember={0})");
+        assertThat(props.getRolePrefix()).isEqualTo("GROUP_");
+        assertThat(props.isConvertToUpperCase()).isFalse();
+        assertThat(props.isIgnorePartialResultException()).isTrue();
     }
 
     @Test
-    @DisplayName("Field 'groupRoleAttribute' can be set and read")
-    void testGroupRoleAttributeField() {
-        SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("groupRoleAttribute");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+    @DisplayName("setDefaultRole(null) should reject with IllegalArgumentException")
+    void setDefaultRole_null_shouldReject() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new SecurityLdapPopulatorProperties().setDefaultRole(null));
     }
 
     @Test
-    @DisplayName("Field 'groupSearchBase' can be set and read")
-    void testGroupSearchBaseField() {
-        SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("groupSearchBase");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+    @DisplayName("setGroupRoleAttribute(null) should reject with IllegalArgumentException")
+    void setGroupRoleAttribute_null_shouldReject() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new SecurityLdapPopulatorProperties().setGroupRoleAttribute(null));
     }
 
     @Test
-    @DisplayName("Field 'searchSubtree' can be set and read")
-    void testSearchSubtreeField() {
-        SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("searchSubtree");
-            f.setAccessible(true);
-            f.set(props, true);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+    @DisplayName("setGroupSearchFilter(null) should reject with IllegalArgumentException")
+    void setGroupSearchFilter_null_shouldReject() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new SecurityLdapPopulatorProperties().setGroupSearchFilter(null));
     }
 
     @Test
-    @DisplayName("Field 'groupSearchFilter' can be set and read")
-    void testGroupSearchFilterField() {
-        SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("groupSearchFilter");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
-    }
-
-    @Test
-    @DisplayName("Field 'rolePrefix' can be set and read")
-    void testRolePrefixField() {
-        SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("rolePrefix");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
-    }
-
-    @Test
-    @DisplayName("Field 'convertToUpperCase' can be set and read")
-    void testConvertToUpperCaseField() {
-        SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("convertToUpperCase");
-            f.setAccessible(true);
-            f.set(props, true);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
-    }
-
-    @Test
-    @DisplayName("Field 'ignorePartialResultException' can be set and read")
-    void testIgnorePartialResultExceptionField() {
-        SecurityLdapPopulatorProperties props = new SecurityLdapPopulatorProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityLdapPopulatorProperties.class.getDeclaredField("ignorePartialResultException");
-            f.setAccessible(true);
-            f.set(props, true);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+    @DisplayName("setRolePrefix(null) should reject with IllegalArgumentException")
+    void setRolePrefix_null_shouldReject() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new SecurityLdapPopulatorProperties().setRolePrefix(null));
     }
 }

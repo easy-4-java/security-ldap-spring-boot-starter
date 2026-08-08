@@ -21,18 +21,52 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for {{ @link AuthoritiesMapperPolicy }}.
+ * Unit tests for {@link AuthoritiesMapperPolicy}.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @DisplayName("AuthoritiesMapperPolicy Tests")
 class AuthoritiesMapperPolicyTest {
 
     @Test
-    @DisplayName("Instance can be created via constructor")
-    void testInstantiation() {
-        AuthoritiesMapperPolicy instance = new AuthoritiesMapperPolicy();
-        assertThat(instance).isNotNull();
+    @DisplayName("Should expose exactly the expected constants")
+    void shouldExposeExpectedConstants() {
+        assertThat(AuthoritiesMapperPolicy.values())
+                .containsExactly(
+                        AuthoritiesMapperPolicy.ROLE_HIERARCHY,
+                        AuthoritiesMapperPolicy.SIMPLE,
+                        AuthoritiesMapperPolicy.NONE);
+    }
+
+    @Test
+    @DisplayName("valueOf should resolve each constant by name")
+    void valueOf_shouldResolveByName() {
+        assertThat(AuthoritiesMapperPolicy.valueOf("ROLE_HIERARCHY"))
+                .isSameAs(AuthoritiesMapperPolicy.ROLE_HIERARCHY);
+        assertThat(AuthoritiesMapperPolicy.valueOf("SIMPLE"))
+                .isSameAs(AuthoritiesMapperPolicy.SIMPLE);
+        assertThat(AuthoritiesMapperPolicy.valueOf("NONE"))
+                .isSameAs(AuthoritiesMapperPolicy.NONE);
+    }
+
+    @Test
+    @DisplayName("Custom equals should agree with compareTo")
+    void equals_shouldReflectCompareTo() {
+        assertThat(AuthoritiesMapperPolicy.ROLE_HIERARCHY.equals(AuthoritiesMapperPolicy.ROLE_HIERARCHY)).isTrue();
+        assertThat(AuthoritiesMapperPolicy.SIMPLE.equals(AuthoritiesMapperPolicy.SIMPLE)).isTrue();
+        assertThat(AuthoritiesMapperPolicy.NONE.equals(AuthoritiesMapperPolicy.NONE)).isTrue();
+
+        assertThat(AuthoritiesMapperPolicy.ROLE_HIERARCHY.equals(AuthoritiesMapperPolicy.SIMPLE)).isFalse();
+        assertThat(AuthoritiesMapperPolicy.SIMPLE.equals(AuthoritiesMapperPolicy.NONE)).isFalse();
+        assertThat(AuthoritiesMapperPolicy.NONE.equals(AuthoritiesMapperPolicy.ROLE_HIERARCHY)).isFalse();
+    }
+
+    @Test
+    @DisplayName("compareTo should define a stable ordering")
+    void compareTo_shouldDefineStableOrdering() {
+        assertThat(AuthoritiesMapperPolicy.ROLE_HIERARCHY.compareTo(AuthoritiesMapperPolicy.SIMPLE)).isNegative();
+        assertThat(AuthoritiesMapperPolicy.SIMPLE.compareTo(AuthoritiesMapperPolicy.NONE)).isNegative();
+        assertThat(AuthoritiesMapperPolicy.NONE.compareTo(AuthoritiesMapperPolicy.ROLE_HIERARCHY)).isPositive();
     }
 }

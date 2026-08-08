@@ -18,134 +18,94 @@ package org.springframework.security.boot.ldap.property;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for {{ @link SecurityActiveDirectoryLdapProperties }}.
+ * Unit tests for {@link SecurityActiveDirectoryLdapProperties}.
  *
- * <p>Verifies default values, getters/setters and POJO contract.</p>
- *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @DisplayName("SecurityActiveDirectoryLdapProperties Tests")
 class SecurityActiveDirectoryLdapPropertiesTest {
+
     @Test
     @DisplayName("Default constructor creates non-null instance")
     void testDefaultInstance() {
-        SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        assertThat(props).isNotNull();
+        assertThat(new SecurityActiveDirectoryLdapProperties()).isNotNull();
     }
 
     @Test
-    @DisplayName("Field 'enabled' can be set and read")
+    @DisplayName("enabled defaults to false and is round-trippable")
     void testEnabledField() {
         SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityActiveDirectoryLdapProperties.class.getDeclaredField("enabled");
-            f.setAccessible(true);
-            f.set(props, true);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        assertThat(props.isEnabled()).isFalse();
+        props.setEnabled(true);
+        assertThat(props.isEnabled()).isTrue();
     }
 
     @Test
-    @DisplayName("Field 'domain' can be set and read")
+    @DisplayName("domain is round-trippable")
     void testDomainField() {
         SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityActiveDirectoryLdapProperties.class.getDeclaredField("domain");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        assertThat(props.getDomain()).isNull();
+        props.setDomain("corp.example.com");
+        assertThat(props.getDomain()).isEqualTo("corp.example.com");
     }
 
     @Test
-    @DisplayName("Field 'rootDn' can be set and read")
+    @DisplayName("rootDn is round-trippable")
     void testRootDnField() {
         SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityActiveDirectoryLdapProperties.class.getDeclaredField("rootDn");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        assertThat(props.getRootDn()).isNull();
+        props.setRootDn("dc=example,dc=com");
+        assertThat(props.getRootDn()).isEqualTo("dc=example,dc=com");
     }
 
     @Test
-    @DisplayName("Field 'url' can be set and read")
+    @DisplayName("url is round-trippable")
     void testUrlField() {
         SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityActiveDirectoryLdapProperties.class.getDeclaredField("url");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        assertThat(props.getUrl()).isNull();
+        props.setUrl("ldap://ad.example.com:389");
+        assertThat(props.getUrl()).isEqualTo("ldap://ad.example.com:389");
     }
 
     @Test
-    @DisplayName("Field 'convertSubErrorCodesToExceptions' can be set and read")
+    @DisplayName("convertSubErrorCodesToExceptions defaults to false and is round-trippable")
     void testConvertSubErrorCodesToExceptionsField() {
         SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityActiveDirectoryLdapProperties.class.getDeclaredField("convertSubErrorCodesToExceptions");
-            f.setAccessible(true);
-            f.set(props, true);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        assertThat(props.isConvertSubErrorCodesToExceptions()).isFalse();
+        props.setConvertSubErrorCodesToExceptions(true);
+        assertThat(props.isConvertSubErrorCodesToExceptions()).isTrue();
     }
 
     @Test
-    @DisplayName("Field 'searchFilter' can be set and read")
+    @DisplayName("searchFilter has a sensible default and is round-trippable")
     void testSearchFilterField() {
         SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityActiveDirectoryLdapProperties.class.getDeclaredField("searchFilter");
-            f.setAccessible(true);
-            f.set(props, "test");
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        assertThat(props.getSearchFilter()).isNotEmpty();
+        props.setSearchFilter("(uid={0})");
+        assertThat(props.getSearchFilter()).isEqualTo("(uid={0})");
     }
 
     @Test
-    @DisplayName("Field 'environment' can be set and read")
+    @DisplayName("environment defaults to a non-null empty map and is replaceable")
     void testEnvironmentField() {
         SecurityActiveDirectoryLdapProperties props = new SecurityActiveDirectoryLdapProperties();
-        // Use reflection to set private field (covers all fields including those without setters)
-        try {
-            java.lang.reflect.Field f = SecurityActiveDirectoryLdapProperties.class.getDeclaredField("environment");
-            f.setAccessible(true);
-            f.set(props, null);
-            Object value = f.get(props);
-            assertThat(value).isNotNull();
-        } catch (Exception e) {
-            // Field may have a more complex type; skip silently
-        }
+        assertThat(props.getEnvironment()).isNotNull().isEmpty();
+
+        Map<String, Object> env = new HashMap<>();
+        env.put("java.naming.referral", "follow");
+        props.setEnvironment(env);
+        assertThat(props.getEnvironment()).isSameAs(env).containsEntry("java.naming.referral", "follow");
+
+        // Replacing with an empty map keeps the field non-null.
+        props.setEnvironment(Collections.emptyMap());
+        assertThat(props.getEnvironment()).isNotNull().isEmpty();
     }
 }

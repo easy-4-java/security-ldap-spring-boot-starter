@@ -15,24 +15,78 @@
  */
 package org.springframework.security.boot.ldap.authentication;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.boot.SecurityLdapProperties;
+import org.springframework.security.boot.ldap.property.SecurityActiveDirectoryLdapProperties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for {{ @link LadpAuthenticationProcessingFilter }}.
+ * Unit tests for {@link LadpAuthenticationProcessingFilter}.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @DisplayName("LadpAuthenticationProcessingFilter Tests")
 class LadpAuthenticationProcessingFilterTest {
 
     @Test
-    @DisplayName("Instance can be created via constructor")
-    void testInstantiation() {
-        LadpAuthenticationProcessingFilter instance = new LadpAuthenticationProcessingFilter(null, null);
-        assertThat(instance).isNotNull();
+    @DisplayName("Constructor wires the ObjectMapper and properties")
+    void constructor_wiresDependencies() {
+        ObjectMapper mapper = new ObjectMapper();
+        SecurityLdapProperties props = new SecurityLdapProperties();
+        LadpAuthenticationProcessingFilter filter = new LadpAuthenticationProcessingFilter(mapper, props);
+
+        assertThat(filter).isNotNull();
+        assertThat(filter.getObjectMapper()).isSameAs(mapper);
+    }
+
+    @Test
+    @DisplayName("authenticationToken returns LdapUsernamePasswordAuthenticationToken when AD is disabled")
+    void authenticationToken_adDisabled_returnsLdapToken() {
+        ObjectMapper mapper = new ObjectMapper();
+        SecurityLdapProperties props = new SecurityLdapProperties();
+        // Active Directory defaults to disabled.
+        assertThat(props.getActiveDirectory().isEnabled()).isFalse();
+
+        LadpAuthenticationProcessingFilter filter = new LadpAuthenticationProcessingFilter(mapper, props);
+        AbstractAuthenticationToken token = filter.authenticationToken("alice", "secret");
+
+        assertThat(token).isInstanceOf(LdapUsernamePasswordAuthenticationToken.class);
+        assertThat(token.getPrincipal()).isEqualTo("alice");
+        assertThat(token.getCredentials()).isEqualTo("secret");
+    }
+
+    @Test
+    @DisplayName("authenticationToken delegates to super when AD is enabled")
+    void authenticationToken_adEnabled_delegatesToSuper() {
+        ObjectMapper mapper = new ObjectMapper();
+        SecurityLdapProperties props = new SecurityLdapProperties();
+        SecurityActiveDirectoryLdapProperties ad = props.getActiveDirectory();
+        ad.setEnabled(true);
+
+        LadpAuthenticationProcessingFilter filter = new LadpAuthenticationProcessingFilter(mapper, props);
+        AbstractAuthenticationToken token = filter.authenticationToken("bob", "pwd");
+
+        // Super builds a plain UsernamePasswordAuthenticationToken (not the LDAP subtype).
+        assertThat(token).isNotInstanceOf(LdapUsernamePasswordAuthenticationToken.class);
+        assertThat(token.getPrincipal()).isEqualTo("bob");
+        assertThat(token.getCredentials()).isEqualTo("pwd");
+    }
+
+    @Test
+    @DisplayName("Filter is constructed with the LDAP properties wired in")
+    void filter_carriesLdapProperties() {
+        ObjectMapper mapper = new ObjectMapper();
+        SecurityLdapProperties props = new SecurityLdapProperties();
+        LadpAuthenticationProcessingFilter filter = new LadpAuthenticationProcessingFilter(mapper, props);
+
+        // The constructor stores ldapProperties; verify via the AD-disabled branch which reads it.
+        // authenticationToken returns the LDAP token type only when AD is disabled (the default).
+        AbstractAuthenticationToken token = filter.authenticationToken("u", "p");
+        assertThat(token).isInstanceOf(LdapUsernamePasswordAuthenticationToken.class);
     }
 }
