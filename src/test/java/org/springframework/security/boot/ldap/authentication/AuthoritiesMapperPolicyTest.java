@@ -15,17 +15,24 @@
  */
 package org.springframework.security.boot.ldap.authentication;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * TODO
+ * Unit tests for {{ @link AuthoritiesMapperPolicy }}.
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
-@SuppressWarnings("serial")
-public class LdapUsernamePasswordAuthenticationToken extends UsernamePasswordAuthenticationToken {
+@DisplayName("AuthoritiesMapperPolicy Tests")
+class AuthoritiesMapperPolicyTest {
 
-	public LdapUsernamePasswordAuthenticationToken(Object principal, Object credentials) {
-		super(principal, credentials);
-	}
-
+    @Test
+    @DisplayName("Instance can be created via constructor")
+    void testInstantiation() {
+        AuthoritiesMapperPolicy instance = new AuthoritiesMapperPolicy();
+        assertThat(instance).isNotNull();
+    }
 }
