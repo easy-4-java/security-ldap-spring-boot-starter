@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * TODO
- * @author ： <a href="https://github.com/hiwepy">wandl</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 public class LadpAuthenticationProcessingFilter extends PostRequestAuthenticationProcessingFilter {
 
