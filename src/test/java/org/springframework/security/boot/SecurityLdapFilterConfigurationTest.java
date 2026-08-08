@@ -13,19 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.springframework.security.boot.ldap.authentication;
+package org.springframework.security.boot;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * TODO
+ * Unit tests for {{ @link SecurityLdapFilterConfiguration }}.
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
-@SuppressWarnings("serial")
-public class LdapUsernamePasswordAuthenticationToken extends UsernamePasswordAuthenticationToken {
+@DisplayName("SecurityLdapFilterConfiguration Tests")
+class SecurityLdapFilterConfigurationTest {
 
-	public LdapUsernamePasswordAuthenticationToken(Object principal, Object credentials) {
-		super(principal, credentials);
-	}
-
+    @Test
+    @DisplayName("Instance can be created via constructor")
+    void testInstantiation() {
+        SecurityLdapFilterConfiguration instance = new SecurityLdapFilterConfiguration();
+        assertThat(instance).isNotNull();
+    }
 }
