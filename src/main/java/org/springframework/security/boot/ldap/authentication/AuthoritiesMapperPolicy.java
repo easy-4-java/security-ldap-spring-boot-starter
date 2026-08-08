@@ -20,7 +20,7 @@ import org.springframework.ldap.core.support.DirContextAuthenticationStrategy;
 
 /**
  * Authorities Mapper Policy
- * @author ： <a href="https://github.com/hiwepy">wandl</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 public enum AuthoritiesMapperPolicy {
 
