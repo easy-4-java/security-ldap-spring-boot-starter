@@ -57,6 +57,13 @@ import org.springframework.security.web.savedrequest.RequestCache;
 @AutoConfigureBefore(SecurityBizAutoConfiguration.class)
 @ConditionalOnProperty(prefix = SecurityLdapProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ SecurityLdapProperties.class, SecurityBizProperties.class })
+/**
+ * Auto-configuration for SecurityLdap integration.
+ * <p>Registers the necessary beans when the feature is enabled.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class SecurityLdapAutoConfiguration {
 
 	public LdapContextSource ldapContextSource(SecurityLdapAuthcProperties authcProperties) {

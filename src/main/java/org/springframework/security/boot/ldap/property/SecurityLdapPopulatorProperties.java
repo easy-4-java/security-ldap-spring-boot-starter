@@ -18,6 +18,14 @@ package org.springframework.security.boot.ldap.property;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.util.Assert;
 
+/**
+ * Configuration properties.
+ * <p>Binds to the application property prefix and provides
+ * customizable settings.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class SecurityLdapPopulatorProperties {
 	
 	private String defaultRole;

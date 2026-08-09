@@ -42,6 +42,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ConditionalOnClass({ AbstractSecurityWebApplicationInitializer.class, SessionCreationPolicy.class })
 @ConditionalOnProperty(prefix = SecurityLdapProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ SecurityLdapProperties.class, SecurityBizProperties.class })
+/**
+ * Filter configuration for SecurityLdap authentication.
+ * <p>Registers authentication filters and security filter chains.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class SecurityLdapFilterConfiguration {
 
 	@Configuration

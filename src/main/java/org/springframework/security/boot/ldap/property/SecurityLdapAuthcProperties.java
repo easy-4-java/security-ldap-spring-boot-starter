@@ -33,6 +33,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+/**
+ * Configuration properties for authentication/authorization settings.
+ * <p>Binds to the application property prefix and provides
+ * customizable settings.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class SecurityLdapAuthcProperties extends SecurityAuthcProperties {
 
 	public static final String PREFIX = "spring.security.ldap.authc";

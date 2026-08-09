@@ -23,6 +23,14 @@ import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 
+/**
+ * Configuration properties.
+ * <p>Binds to the application property prefix and provides
+ * customizable settings.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class SecurityActiveDirectoryLdapProperties {
 
 	/**
