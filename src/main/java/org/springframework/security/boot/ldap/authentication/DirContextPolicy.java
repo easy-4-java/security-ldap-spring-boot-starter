@@ -21,6 +21,7 @@ import org.springframework.ldap.core.support.DirContextAuthenticationStrategy;
 /**
  * Dir Context Strategy
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public enum DirContextPolicy {
 
@@ -53,6 +54,12 @@ public enum DirContextPolicy {
 	 */
 	SIMPLE;
 
+	/**
+	 * Determines whether equals.
+	 *
+	 * @param policy the policy
+	 * @return the result
+	 */
 	public boolean equals(DirContextPolicy policy) {
 		return this.compareTo(policy) == 0;
 	}

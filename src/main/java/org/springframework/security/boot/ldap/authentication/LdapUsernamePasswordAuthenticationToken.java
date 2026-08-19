@@ -20,10 +20,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 /**
  * TODO
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @SuppressWarnings("serial")
 public class LdapUsernamePasswordAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
+	/**
+	 * Constructs a new ldap username password authentication token instance.
+	 *
+	 * @param principal the principal
+	 * @param credentials the credentials
+	 */
 	public LdapUsernamePasswordAuthenticationToken(Object principal, Object credentials) {
 		super(principal, credentials);
 	}

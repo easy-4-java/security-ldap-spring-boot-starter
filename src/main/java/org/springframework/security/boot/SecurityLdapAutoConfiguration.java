@@ -66,6 +66,12 @@ import org.springframework.security.web.savedrequest.RequestCache;
  */
 public class SecurityLdapAutoConfiguration {
 
+	/**
+	 * LDAP Context Source.
+	 *
+	 * @param authcProperties the authc properties
+	 * @return the result
+	 */
 	public LdapContextSource ldapContextSource(SecurityLdapAuthcProperties authcProperties) {
 		DefaultSpringSecurityContextSource contextSource = new DefaultSpringSecurityContextSource(
 				authcProperties.getProviderUrl());
@@ -83,6 +89,12 @@ public class SecurityLdapAutoConfiguration {
 		return contextSource;
 	}
 
+	/**
+	 * authentication Strategy.
+	 *
+	 * @param authcProperties the authc properties
+	 * @return the result
+	 */
 	@Bean
 	public DirContextAuthenticationStrategy authenticationStrategy(SecurityLdapAuthcProperties authcProperties) {
 		if (DirContextPolicy.DEFAULT_TLS.equals(authcProperties.getDirContextPolicy())) {
@@ -96,11 +108,24 @@ public class SecurityLdapAutoConfiguration {
 		}
 	}
 
+	/**
+	 * authentication Source.
+	 *
+	 * @return the result
+	 */
 	@Bean
 	public AuthenticationSource authenticationSource() {
 		return new SpringSecurityAuthenticationSource();
 	}
 
+	/**
+	 * context Source.
+	 *
+	 * @param authcProperties the authc properties
+	 * @param authenticationStrategy the authentication strategy
+	 * @param authenticationSource the authentication source
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public BaseLdapPathContextSource contextSource(
@@ -127,6 +152,13 @@ public class SecurityLdapAutoConfiguration {
 		return contextSource;
 	}
 
+	/**
+	 * user Search.
+	 *
+	 * @param authcProperties the authc properties
+	 * @param contextSource the context source
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public LdapUserSearch userSearch(SecurityLdapAuthcProperties authcProperties, BaseLdapPathContextSource contextSource) {
@@ -142,6 +174,13 @@ public class SecurityLdapAutoConfiguration {
 		return userSearch;
 	}
 
+	/**
+	 * user Details Service.
+	 *
+	 * @param userSearch the user search
+	 * @param authoritiesPopulator the authorities populator
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public UserDetailsService userDetailsService(LdapUserSearch userSearch,
@@ -149,12 +188,24 @@ public class SecurityLdapAutoConfiguration {
 		return new LdapUserDetailsService(userSearch, authoritiesPopulator);
 	}
 	
+	/**
+	 * user Details Context Mapper.
+	 *
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public UserDetailsContextMapper userDetailsContextMapper() {
 		return new LdapUserDetailsMapper();
 	}
 	
+	/**
+	 * authorities Mapper.
+	 *
+	 * @param authcProperties the authc properties
+	 * @param roleHierarchy the role hierarchy
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public GrantedAuthoritiesMapper authoritiesMapper(SecurityLdapAuthcProperties authcProperties,RoleHierarchy roleHierarchy) {
@@ -167,12 +218,26 @@ public class SecurityLdapAutoConfiguration {
 		}
 	}
 
+	/**
+	 * LDAP Authenticator.
+	 *
+	 * @param ldapPathContextSource the ldap path context source
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public AbstractLdapAuthenticator ldapAuthenticator(BaseLdapPathContextSource ldapPathContextSource) {
 		return new PasswordComparisonAuthenticator(ldapPathContextSource);
 	}
 
+	/**
+	 * LDAP Authorities Populator.
+	 *
+	 * @param ldapProperties the ldap properties
+	 * @param authcProperties the authc properties
+	 * @param contextSource the context source
+	 * @return the result
+	 */
 	@Bean
 	public LdapAuthoritiesPopulator ldapAuthoritiesPopulator(
 			SecurityLdapProperties ldapProperties,
@@ -194,6 +259,19 @@ public class SecurityLdapAutoConfiguration {
 		return authoritiesPopulator;
 	}
 
+	/**
+	 * LDAP Authentication Provider.
+	 *
+	 * @param ldapProperties the ldap properties
+	 * @param authcProperties the authc properties
+	 * @param authoritiesMapper the authorities mapper
+	 * @param ldapAuthenticator the ldap authenticator
+	 * @param ldapAuthoritiesPopulator the ldap authorities populator
+	 * @param messageSource the message source
+	 * @param userDetailsContextMapper the user details context mapper
+	 * @return the result
+	 * @throws Exception if an error occurs
+	 */
 	@Bean
 	public AbstractLdapAuthenticationProvider ldapAuthenticationProvider(
 			SecurityLdapProperties ldapProperties,
@@ -222,6 +300,12 @@ public class SecurityLdapAutoConfiguration {
 
 		LdapAuthenticationProvider authenticationProvider = new LdapAuthenticationProvider(ldapAuthenticator,
 				ldapAuthoritiesPopulator) {
+			/**
+			 * Determines whether supports.
+			 *
+			 * @param authentication the authentication
+			 * @return the result
+			 */
 			public boolean supports(Class<?> authentication) {
 				return LdapUsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
 			}
@@ -236,6 +320,14 @@ public class SecurityLdapAutoConfiguration {
 		return authenticationProvider;
 	}
 
+	/**
+	 * LDAP Authentication Success Handler.
+	 *
+	 * @param ldapProperties the ldap properties
+	 * @param authcProperties the authc properties
+	 * @param false the false
+	 * @return the result
+	 */
 	@Bean
 	public LdapAuthenticationSuccessHandler ldapAuthenticationSuccessHandler(
 			SecurityLdapProperties ldapProperties,
@@ -252,6 +344,15 @@ public class SecurityLdapAutoConfiguration {
 		return successHandler;
 	}
 
+	/**
+	 * LDAP Authentication Failure Handler.
+	 *
+	 * @param ldapProperties the ldap properties
+	 * @param authcProperties the authc properties
+	 * @param sessionMgtProperties the session mgt properties
+	 * @param false the false
+	 * @return the result
+	 */
 	@Bean
 	public LdapAuthenticationFailureHandler ldapAuthenticationFailureHandler(
 			SecurityLdapProperties ldapProperties,

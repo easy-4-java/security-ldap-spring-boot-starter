@@ -27,16 +27,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * TODO
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class LadpAuthenticationProcessingFilter extends PostRequestAuthenticationProcessingFilter {
 
 	private SecurityLdapProperties ldapProperties;
 	
+	/**
+	 * Constructs a new ladp authentication processing filter instance.
+	 *
+	 * @param objectMapper the object mapper
+	 * @param ldapProperties the ldap properties
+	 */
 	public LadpAuthenticationProcessingFilter(ObjectMapper objectMapper, SecurityLdapProperties ldapProperties) {
 		super(objectMapper, PathPatternRequestMatcher.pathPattern(HttpMethod.POST, "/login/ladp"));
 		this.ldapProperties = ldapProperties;
 	}
 	
+	/**
+	 * authentication Token.
+	 *
+	 * @param username the username
+	 * @param password the password
+	 * @return the result
+	 */
 	@Override
 	protected AbstractAuthenticationToken authenticationToken(String username, String password) {
 		SecurityActiveDirectoryLdapProperties adLdapProperties = ldapProperties.getActiveDirectory();

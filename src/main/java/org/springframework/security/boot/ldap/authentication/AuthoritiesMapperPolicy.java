@@ -21,6 +21,7 @@ import org.springframework.ldap.core.support.DirContextAuthenticationStrategy;
 /**
  * Authorities Mapper Policy
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public enum AuthoritiesMapperPolicy {
 
@@ -49,6 +50,12 @@ public enum AuthoritiesMapperPolicy {
 	 */
 	NONE;
 	
+	/**
+	 * Determines whether equals.
+	 *
+	 * @param policy the policy
+	 * @return the result
+	 */
 	public boolean equals(AuthoritiesMapperPolicy policy) {
 		return this.compareTo(policy) == 0;
 	}

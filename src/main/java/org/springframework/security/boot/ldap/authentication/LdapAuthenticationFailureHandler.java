@@ -4,6 +4,8 @@ import org.springframework.security.web.authentication.ExceptionMappingAuthentic
 
 /**
  * Post认证请求失败后的处理实现
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class LdapAuthenticationFailureHandler extends ExceptionMappingAuthenticationFailureHandler {
 	 

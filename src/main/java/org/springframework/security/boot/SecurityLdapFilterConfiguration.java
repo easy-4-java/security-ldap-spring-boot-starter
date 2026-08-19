@@ -103,6 +103,12 @@ public class SecurityLdapFilterConfiguration {
    			
 		}
 		
+		/**
+		 * authentication Processing Filter.
+		 *
+		 * @return the result
+		 * @throws Exception if an error occurs
+		 */
 		public LadpAuthenticationProcessingFilter authenticationProcessingFilter() throws Exception {
 			
 			// Form Login With LDAP 
@@ -126,6 +132,12 @@ public class SecurityLdapFilterConfiguration {
 			return authenticationFilter;
 		}
 		
+		/**
+		 * configure.
+		 *
+		 * @param http the http
+		 * @throws Exception if an error occurs
+		 */
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
 			
@@ -142,6 +154,12 @@ public class SecurityLdapFilterConfiguration {
 			
 		}
 		
+	    /**
+	     * configure.
+	     *
+	     * @param web the web
+	     * @throws Exception if an error occurs
+	     */
 		@Override
 	    public void configure(WebSecurity web) throws Exception {
 	    	super.configure(web);

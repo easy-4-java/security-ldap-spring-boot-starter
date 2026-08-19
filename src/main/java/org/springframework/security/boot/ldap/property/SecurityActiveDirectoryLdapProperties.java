@@ -45,38 +45,83 @@ public class SecurityActiveDirectoryLdapProperties {
 	private String searchFilter = "(&(objectClass=user)(userPrincipalName={0}))";
 	private Map<String, Object> environment = new HashMap<String, Object>();
 
+	/**
+	 * Returns the enabled.
+	 *
+	 * @return the enabled
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Sets the enabled.
+	 *
+	 * @param enabled the enabled
+	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
+	/**
+	 * Returns the domain.
+	 *
+	 * @return the domain
+	 */
 	public String getDomain() {
 		return domain;
 	}
 
+	/**
+	 * Sets the domain.
+	 *
+	 * @param domain the domain
+	 */
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
 
+	/**
+	 * Returns the root dn.
+	 *
+	 * @return the root dn
+	 */
 	public String getRootDn() {
 		return rootDn;
 	}
 
+	/**
+	 * Sets the root dn.
+	 *
+	 * @param rootDn the root dn
+	 */
 	public void setRootDn(String rootDn) {
 		this.rootDn = rootDn;
 	}
 
+	/**
+	 * Returns the url.
+	 *
+	 * @return the url
+	 */
 	public String getUrl() {
 		return url;
 	}
 
+	/**
+	 * Sets the url.
+	 *
+	 * @param url the url
+	 */
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
+	/**
+	 * Returns the convert sub error codes to exceptions.
+	 *
+	 * @return the convert sub error codes to exceptions
+	 */
 	public boolean isConvertSubErrorCodesToExceptions() {
 		return convertSubErrorCodesToExceptions;
 	}
@@ -99,6 +144,11 @@ public class SecurityActiveDirectoryLdapProperties {
 		this.convertSubErrorCodesToExceptions = convertSubErrorCodesToExceptions;
 	}
 
+	/**
+	 * Returns the search filter.
+	 *
+	 * @return the search filter
+	 */
 	public String getSearchFilter() {
 		return searchFilter;
 	}
@@ -118,6 +168,11 @@ public class SecurityActiveDirectoryLdapProperties {
 		this.searchFilter = searchFilter;
 	}
 
+	/**
+	 * Returns the environment.
+	 *
+	 * @return the environment
+	 */
 	public Map<String, Object> getEnvironment() {
 		return environment;
 	}

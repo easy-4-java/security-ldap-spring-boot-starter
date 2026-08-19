@@ -74,11 +74,21 @@ public class SecurityLdapPopulatorProperties {
 		this.convertToUpperCase = convertToUpperCase;
 	}
 
+	/**
+	 * Sets the group role attribute.
+	 *
+	 * @param groupRoleAttribute the group role attribute
+	 */
 	public void setGroupRoleAttribute(String groupRoleAttribute) {
 		Assert.notNull(groupRoleAttribute, "groupRoleAttribute must not be null");
 		this.groupRoleAttribute = groupRoleAttribute;
 	}
 
+	/**
+	 * Sets the group search base.
+	 *
+	 * @param groupSearchBase the group search base
+	 */
 	public void setGroupSearchBase(String groupSearchBase) {
 		this.groupSearchBase = groupSearchBase;
 	}
@@ -94,6 +104,11 @@ public class SecurityLdapPopulatorProperties {
 		this.searchSubtree = searchSubtree;
 	}
 
+	/**
+	 * Sets the group search filter.
+	 *
+	 * @param groupSearchFilter the group search filter
+	 */
 	public void setGroupSearchFilter(String groupSearchFilter) {
 		Assert.notNull(groupSearchFilter, "groupSearchFilter must not be null");
 		this.groupSearchFilter = groupSearchFilter;
@@ -182,14 +197,29 @@ public class SecurityLdapPopulatorProperties {
 		return this.convertToUpperCase;
 	}
 
+	/**
+	 * Returns the group search base.
+	 *
+	 * @return the group search base
+	 */
 	public String getGroupSearchBase() {
 		return groupSearchBase;
 	}
 
+	/**
+	 * Returns the search subtree.
+	 *
+	 * @return the search subtree
+	 */
 	public boolean isSearchSubtree() {
 		return searchSubtree;
 	}
 
+	/**
+	 * Returns the ignore partial result exception.
+	 *
+	 * @return the ignore partial result exception
+	 */
 	public boolean isIgnorePartialResultException() {
 		return ignorePartialResultException;
 	}
